@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 
+import os
 import re
 from bs4 import BeautifulSoup
-from nltk.corpus import stopwords
+try:
+    from nltk.corpus import stopwords
+except LookupError:
+    import nltk.downloader
+    nltk.downloader.download('stopwords')
+    from nltk.corpus import stopwords
 
 
 def review_to_wordlist(review, remove_stopwords=False, remove_punc=True, remove_num=True) -> list:

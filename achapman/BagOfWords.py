@@ -19,34 +19,20 @@ import pandas as pd
 import numpy as np
 
 if __name__ == '__main__':
-    train = pd.read_csv(
-        os.path.join(os.path.dirname(__file__), 'data', 'labeledTrainData.tsv'),
-        header=0,
-        delimiter="\t",
-        quoting=3
-    )
-    test = pd.read_csv(
-        os.path.join(os.path.dirname(__file__), 'data', 'testData.tsv'),
-        header=0,
-        delimiter="\t",
-        quoting=3,
-        )
+    data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+
+    train = pd.read_csv(os.path.join(data_dir, 'labeledTrainData.tsv'), header=0, delimiter="\t", quoting=3)
+    test = pd.read_csv(os.path.join(data_dir, 'testData.tsv'), header=0, delimiter="\t", quoting=3)
 
     print('The first review is:')
     print(train["review"][0])
 
     input("Press Enter to continue...")
 
-    # print('Download text data sets. If you already have NLTK datasets downloaded, just close the Python download'
-    #       ' window...')
-    #nltk.download()  # Download text data sets, including stop words
-
     # Initialize an empty list to hold the clean reviews
     clean_train_reviews = []
 
-    # Loop over each review; create an index i that goes from 0 to the length
-    # of the movie review list
-
+    # Loop over each review; create an index i that goes from 0 to the length of the movie review list
     print("Cleaning and parsing the training set movie reviews...\n")
     for i in range(len(train["review"])):
         clean_train_reviews.append(" ".join(kutil.review_to_wordlist(train["review"][i], remove_stopwords=True)))
@@ -88,5 +74,5 @@ if __name__ == '__main__':
     output = pd.DataFrame(data={"id": test["id"], "sentiment": result})
 
     # Use pandas to write the comma-separated output file
-    output.to_csv(os.path.join(os.path.dirname(__file__), 'data', 'Bag_of_Words_model.csv'), index=False, quoting=3)
+    output.to_csv(os.path.join(data_dir, 'Bag_of_Words_model.csv'), index=False, quoting=3)
     print("Wrote results to Bag_of_Words_model.csv")
