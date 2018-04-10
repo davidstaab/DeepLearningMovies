@@ -11,7 +11,7 @@ def review_to_wordlist(review, remove_stopwords=False, remove_punc=True, remove_
     Returns a list of words.
     """
 
-    review_text = BeautifulSoup(review).get_text()
+    review_text = BeautifulSoup(review, 'html.parser').get_text()
 
     if remove_punc:
         review_text = re.sub("[^a-zA-Z0-9]", " ", review_text)
