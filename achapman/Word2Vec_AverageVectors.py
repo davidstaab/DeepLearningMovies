@@ -95,20 +95,17 @@ if __name__ == '__main__':
     print("Read %d labeled train reviews, %d labeled test reviews, and %d unlabeled reviews\n" %
           (train["review"].size, test["review"].size, unlabeled_train["review"].size))
 
-    # Load the punkt tokenizer
-    tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-
     # ****** Split the labeled and unlabeled training sets into clean sentences
     #
     sentences = []  # Initialize an empty list of sentences
 
     print("Parsing sentences from training set")
     for review in train["review"]:
-        sentences += kutil.review_to_sentences(review, tokenizer)
+        sentences += kutil.review_to_sentences(review)
 
     print("Parsing sentences from unlabeled set")
     for review in unlabeled_train["review"]:
-        sentences += kutil.review_to_sentences(review, tokenizer)
+        sentences += kutil.review_to_sentences(review)
 
     # ****** Set parameters and train the word2vec model
     #

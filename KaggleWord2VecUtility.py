@@ -1,14 +1,21 @@
 #!/usr/bin/env python
 
-import os
 import re
 from bs4 import BeautifulSoup
+
+from nltk.corpus import stopwords
 try:
-    from nltk.corpus import stopwords
+    stopwords.words('english')
 except LookupError:
     import nltk.downloader
     nltk.downloader.download('stopwords')
-    from nltk.corpus import stopwords
+
+from nltk.tokenize import sent_tokenize
+try:
+    sent_tokenize(['Hello world'], 'english')
+except LookupError:
+    import nltk.downloader
+    nltk.downloader.download('punkt')
 
 
 def review_to_wordlist(review, remove_stopwords=False, remove_punc=True, remove_num=True) -> list:
@@ -32,19 +39,16 @@ def review_to_wordlist(review, remove_stopwords=False, remove_punc=True, remove_
     return words
 
 
-def review_to_sentences(review, tokenizer, remove_stopwords=False) -> list:
+def review_to_sentences(review, *args) -> list:
     """
     Function to split a review into parsed sentences. Returns a list of sentences, where each sentence is a list of
-    words
+    words. *args is the same as for `review_to_wordlist()`
     """
-    # 1. Use the NLTK tokenizer to split the paragraph into sentences
-    raw_sentences = tokenizer.tokenize(review.decode('utf8').strip())
 
-    # 2. Loop over each sentence
+    raw_sentences = sent_tokenize(review.decode('utf8').strip(), 'english')
+
     sentences = []
     for raw_sentence in raw_sentences:
-        # If a sentence is empty, skip it
-        if len(raw_sentence) > 0:
-            # Otherwise, call review_to_wordlist to get a list of words
-            sentences.append(review_to_wordlist(raw_sentence, remove_stopwords))
+        if len(raw_sentence):
+            sentences.append(review_to_wordlist(raw_sentence, *args))
     return sentences
